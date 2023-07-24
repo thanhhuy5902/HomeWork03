@@ -195,10 +195,7 @@ console.log(row1);
 function buildProductCard(cloth) {
   let card = document.createElement("div");
   card.className = "product-item";
-  Object.assign(card.style, {
-    display: "flex",
-    justifyContent: "center",
-  });
+
   card.innerHTML = `<div class="status">
   ${cloth.status}
 </div>
@@ -212,7 +209,7 @@ function buildProductCard(cloth) {
 </div>
 <div class="price">
   <p>${cloth.price}</p>
- <p></p>Số lượng ${cloth.quantity}</p>
+ <p>Số lượng ${cloth.quantity}</p>
 </div>
 `;
   let btnBox = document.createElement("div");
@@ -351,10 +348,24 @@ function rendergiohang(cloth) {
   sanpham.appendChild(addbtn);
   sanpham.appendChild(deletebtn);
   deletebtn.onclick = function () {
-    // Xóa sản phẩm khỏi giỏ hàng
     updateTotal(-cloth.price);
-    sanpham.remove(); // Xóa sản phẩm khỏi giao diện
-    // Hoặc thực hiện xử lý xóa sản phẩm trong cơ sở dữ liệu tùy theo yêu cầu
+    sanpham.remove();
+    for (let i = 0; i < cartList.length; i++) {
+      if (cartList[i].name === cloth.name) {
+        cartList.splice(i, 1);
+        break;
+      }
+    }
+
+    // Cập nhật lại giao diện giỏ hàng
+    let listsanpham = document.getElementsByClassName("listsanpham")[0];
+    listsanpham.removeChild(sanpham);
+
+    // Cập nhật lại tổng tiền sau khi xóa sản phẩm
+    let total = 0;
+    for (let i = 0; i < cartList.length; i++) {
+      total += cartList[i].price * cartList[i].stock;
+    }
   };
   addbtn.addEventListener("click", () => {
     if (cloth.stock <= cloth.quantity) {
