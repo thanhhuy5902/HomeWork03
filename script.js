@@ -238,9 +238,9 @@ function buildProductCard(cloth) {
       </div>
       <div class="price">
         <p>${cloth.price}</p>
-
+        <p>Số lượng ${cloth.quantity}</p>
       </div>
-      <div class="item-desc">Số lượng ${cloth.quantity}</div>
+      
           `;
       btnAdd.appendChild(boldText);
       btnBox.appendChild(btnAdd);
@@ -348,7 +348,7 @@ function rendergiohang(cloth) {
   sanpham.appendChild(addbtn);
   sanpham.appendChild(deletebtn);
   deletebtn.onclick = function () {
-    updateTotal(-cloth.price);
+    updateTotal(-cloth.price * cloth.stock);
     sanpham.remove();
     for (let i = 0; i < cartList.length; i++) {
       if (cartList[i].name === cloth.name) {
@@ -358,13 +358,14 @@ function rendergiohang(cloth) {
     }
 
     // Cập nhật lại giao diện giỏ hàng
-    let listsanpham = document.getElementsByClassName("listsanpham")[0];
-    listsanpham.removeChild(sanpham);
+    // let listsanpham = document.getElementsByClassName("listsanpham")[0];
+    // listsanpham.removeChild(sanpham);
 
     // Cập nhật lại tổng tiền sau khi xóa sản phẩm
     let total = 0;
     for (let i = 0; i < cartList.length; i++) {
       total += cartList[i].price * cartList[i].stock;
+      console.log(total);
     }
   };
   addbtn.addEventListener("click", () => {
